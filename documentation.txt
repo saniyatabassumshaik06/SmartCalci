@@ -1,0 +1,12 @@
+SmartCalc — Web Calculator Project
+---------------------------------
+This project is created using HTML, CSS, and JavaScript.
+
+Features:
+- Performs all basic arithmetic operations.
+- Follows BODMAS order of operations.
+- Includes theme toggle, history, and error handling.
+- User-friendly responsive design.
+
+Author: Saniya
+Internship: Unified Mentor

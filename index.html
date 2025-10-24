@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCalc</title>
+
+  <!--
+    SmartCalc — Single-file calculator project
+    Includes: HTML, CSS, JS
+    Features: BODMAS calculation, history, dark/light theme, keyboard input
+  -->
+
+  <style>
+    /* ---------- Global Styles ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Center calculator on page */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f7f7f7;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ---------- Container and Header ---------- */
+    .container {
+      text-align: center;
+      width: 340px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    /* Theme switch button */
+    .theme-btn {
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: background 0.3s;
+    }
+
+    .theme-btn:hover {
+      background: #666;
+    }
+
+    /* ---------- Calculator Box ---------- */
+    .calculator {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Display screen */
+    #display {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 15px;
+      font-size: 22px;
+      padding: 10px;
+      text-align: right;
+      border: none;
+      border-radius: 8px;
+      background: #f0f0f0;
+      color: #222;
+    }
+
+    /* Buttons grid */
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    /* Common button style */
+    .btn {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #ddd;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.3s;
+    }
+
+    .btn:hover {
+      background: #ccc;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Operator and extra button colors */
+    .operator {
+      background: #ff9a76;
+      color: white;
+    }
+
+    .operator:hover {
+      background: #ff7b50;
+    }
+
+    .extra {
+      background: #76c7ff;
+      color: white;
+    }
+
+    .extra:hover {
+      background: #4db8ff;
+    }
+
+    /* ---------- History Section ---------- */
+    .history {
+      margin-top: 20px;
+      text-align: left;
+      background: #fafafa;
+      padding: 10px;
+      border-radius: 10px;
+      max-height: 140px;
+      overflow-y: auto;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .history h2 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    #history-list {
+      list-style: none;
+    }
+
+    #history-list li {
+      margin-bottom: 4px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* ---------- Dark Mode ---------- */
+    body.dark {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    body.dark .calculator {
+      background: #333;
+    }
+
+    body.dark #display {
+      background: #222;
+      color: white;
+    }
+
+    body.dark .btn {
+      background: #555;
+      color: white;
+    }
+
+    body.dark .btn:hover {
+      background: #666;
+    }
+
+    body.dark .operator {
+      background: #ff6b6b;
+    }
+
+    body.dark .operator:hover {
+      background: #ff4b4b;
+    }
+
+    body.dark .extra {
+      background: #4dafff;
+    }
+
+    body.dark .extra:hover {
+      background: #1a90ff;
+    }
+
+    body.dark .history {
+      background: #222;
+    }
+
+    body.dark footer {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SmartCalc</h1>
+    <button id="theme-toggle" class="theme-btn">Switch Theme</button>
+
+    <!-- Calculator display and buttons -->
+    <div class="calculator">
+      <input type="text" id="display" disabled />
+      <div class="buttons">
+        <!-- First row -->
+        <button class="btn operator">C</button>
+        <button class="btn operator">/</button>
+        <button class="btn operator">*</button>
+        <button class="btn operator">-</button>
+
+        <!-- Second row -->
+        <button class="btn">7</button>
+        <button class="btn">8</button>
+        <button class="btn">9</button>
+        <button class="btn operator">+</button>
+
+        <!-- Third row -->
+        <button class="btn">4</button>
+        <button class="btn">5</button>
+        <button class="btn">6</button>
+        <button class="btn operator">=</button>
+
+        <!-- Fourth row -->
+        <button class="btn">1</button>
+        <button class="btn">2</button>
+        <button class="btn">3</button>
+        <button class="btn">0</button>
+
+        <!-- Extra functions -->
+        <button class="btn">.</button>
+        <button class="btn extra">√</button>
+        <button class="btn extra">x²</button>
+        <button class="btn extra">%</button>
+        <button class="btn extra">±</button>
+      </div>
+    </div>
+
+    <!-- Calculation history -->
+    <div class="history">
+      <h2>History</h2>
+      <ul id="history-list"></ul>
+    </div>
+
+    <footer>✨ Made with ❤️ by Saniya ✨</footer>
+  </div>
+
+  <script>
+    /* ---------- JavaScript Section ---------- */
+
+    // Get references to elements
+    const display = document.getElementById("display");
+    const buttons = document.querySelectorAll(".btn");
+    const historyList = document.getElementById("history-list");
+    const themeToggle = document.getElementById("theme-toggle");
+    let history = []; // store last 5 calculations
+
+    // -------- Handle Button Clicks --------
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.textContent;
+
+        if (value === "C") {
+          // Clear display
+          display.value = "";
+        } else if (value === "=") {
+          // Evaluate expression
+          calculateResult();
+        } else if (value === "√") {
+          // Square root
+          if (display.value) display.value = Math.sqrt(eval(display.value));
+        } else if (value === "x²") {
+          // Square
+          if (display.value) display.value = Math.pow(eval(display.value), 2);
+        } else if (value === "%") {
+          // Percentage
+          if (display.value) display.value = eval(display.value) / 100;
+        } else if (value === "±") {
+          // Toggle sign
+          if (display.value) display.value = eval(display.value) * -1;
+        } else {
+          // Append numbers/operators
+          display.value += value;
+        }
+      });
+    });
+
+    // -------- Calculate Result (BODMAS handled by eval) --------
+    function calculateResult() {
+      try {
+        let result = eval(display.value); // JS eval follows operator precedence
+        if (result === Infinity || isNaN(result)) {
+          display.value = "Error";
+        } else {
+          // Add to history
+          history.unshift(`${display.value} = ${result}`);
+          if (history.length > 5) history.pop();
+          updateHistory();
+          display.value = result;
+        }
+      } catch {
+        display.value = "Error";
+      }
+    }
+
+    // -------- Update History List --------
+    function updateHistory() {
+      historyList.innerHTML = "";
+      history.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        historyList.appendChild(li);
+      });
+    }
+
+    // -------- Theme Toggle --------
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeToggle.textContent = document.body.classList.contains("dark")
+        ? "Switch to Light Mode"
+        : "Switch Theme";
+    });
+
+    // -------- Keyboard Input --------
+    document.addEventListener("keydown", (event) => {
+      if (
+        (event.key >= "0" && event.key <= "9") ||
+        ["+", "-", "*", "/", "."].includes(event.key)
+      ) {
+        display.value += event.key;
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        calculateResult();
+      } else if (event.key === "Backspace") {
+        display.value = display.value.slice(0, -1);
+      } else if (event.key === "Escape") {
+        display.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
