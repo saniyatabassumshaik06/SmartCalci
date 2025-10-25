@@ -1,6 +1,6 @@
 # 💻 SmartCalc — Advanced Web Calculator
 
-## 🚀 Overview
+## Overview
 SmartCalc is a responsive, feature-rich calculator built using **HTML**, **CSS**, and **JavaScript**.  
 It performs accurate arithmetic operations while supporting advanced math features and a dark/light theme switch.
 
@@ -41,9 +41,10 @@ It performs accurate arithmetic operations while supporting advanced math featur
 ---
 
 ## 👩‍💻 Author
-**Developed by:** Saniya  
+**Developed by:** Shaik Saniya  
 **Project Name:** SmartCalc  
 **Internship:** Unified Mentor — Front-End Development Project  
-**Email:** info@unifiedmentor.com  
+**Email:** saniyatabassumshaik@gmail.com 
 
 ✨ *“Made with ❤️ by Saniya.”* ✨
+
